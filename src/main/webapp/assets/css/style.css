@@ -1,0 +1,220 @@
+/* =====================================================================
+   StudentRent - stylesheet toi gian, khong dung framework ngoai
+   ===================================================================== */
+
+:root {
+    --bg: #f5f6f8;
+    --surface: #ffffff;
+    --border: #dcdfe4;
+    --text: #1f2329;
+    --muted: #6b7280;
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --danger: #dc2626;
+    --success: #16a34a;
+    --warning: #d97706;
+    --radius: 6px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 15px;
+    color: var(--text);
+    background: var(--bg);
+}
+
+a { color: var(--primary); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+h1 { font-size: 1.5rem; margin: 0 0 1rem; }
+h2 { font-size: 1.15rem; margin: 1.75rem 0 .75rem; }
+
+.muted { color: var(--muted); }
+
+/* ---------- Topbar ---------- */
+.topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: .75rem 1.25rem;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+}
+.brand { font-weight: 600; font-size: 1.1rem; color: var(--text); }
+.topbar-right { display: flex; align-items: center; gap: .75rem; }
+.user-chip { color: var(--muted); }
+
+/* ---------- Layout ---------- */
+.layout { display: flex; min-height: calc(100vh - 105px); }
+
+.sidebar {
+    flex: 0 0 200px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 1rem 0;
+}
+.sidebar ul { list-style: none; margin: 0; padding: 0; }
+.sidebar a {
+    display: block; padding: .6rem 1.25rem;
+    color: var(--text); border-left: 3px solid transparent;
+}
+.sidebar a:hover {
+    background: var(--bg); border-left-color: var(--primary); text-decoration: none;
+}
+
+.content { flex: 1; padding: 1.5rem; min-width: 0; }
+
+.footer {
+    padding: .75rem 1.25rem; text-align: center;
+    color: var(--muted); border-top: 1px solid var(--border); background: var(--surface);
+}
+
+.page-head {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap;
+}
+.page-head h1 { margin: 0; }
+
+/* ---------- Buttons ---------- */
+.btn {
+    display: inline-block; padding: .45rem .9rem;
+    border: 1px solid var(--border); border-radius: var(--radius);
+    background: var(--surface); color: var(--text);
+    font-size: .9rem; line-height: 1.2; cursor: pointer;
+}
+.btn:hover { background: var(--bg); text-decoration: none; }
+.btn-primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--primary-dark); }
+.btn-danger { background: var(--danger); border-color: var(--danger); color: #fff; }
+.btn-sm { padding: .25rem .6rem; font-size: .8rem; }
+.btn-block { width: 100%; }
+
+/* ---------- Alerts ---------- */
+.alert {
+    padding: .7rem 1rem; border-radius: var(--radius);
+    margin-bottom: 1rem; border: 1px solid transparent;
+}
+.alert-error   { background: #fee2e2; border-color: #fca5a5; color: #7f1d1d; }
+.alert-success { background: #dcfce7; border-color: #86efac; color: #14532d; }
+
+/* ---------- Tables ---------- */
+.table {
+    width: 100%; border-collapse: collapse;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); overflow: hidden;
+}
+.table th, .table td {
+    padding: .6rem .75rem; text-align: left;
+    border-bottom: 1px solid var(--border); vertical-align: middle;
+}
+.table thead th { background: var(--bg); font-weight: 600; font-size: .85rem; }
+.table tbody tr:hover { background: #fafbfc; }
+.table tfoot th { background: var(--bg); }
+.table tfoot tr.total th { font-size: 1.05rem; color: var(--primary); }
+.table .empty { text-align: center; color: var(--muted); padding: 1.5rem; }
+.table .actions { white-space: nowrap; }
+.table .amount { text-align: right; }
+
+/* ---------- Badges trang thai ---------- */
+.badge {
+    display: inline-block; padding: .15rem .5rem;
+    border-radius: 999px; font-size: .75rem; font-weight: 600;
+    background: #e5e7eb; color: #374151;
+}
+.badge-AVAILABLE, .badge-PAID, .badge-ACTIVE   { background: #dcfce7; color: #14532d; }
+.badge-OCCUPIED, .badge-PARTIAL, .badge-PENDING { background: #dbeafe; color: #1e3a5f; }
+.badge-MAINTENANCE, .badge-RESERVED, .badge-UNPAID { background: #fef3c7; color: #78350f; }
+.badge-OVERDUE, .badge-TERMINATED, .badge-CANCELLED, .badge-EXPIRED {
+    background: #fee2e2; color: #7f1d1d;
+}
+
+/* ---------- Forms ---------- */
+.filter-bar {
+    display: flex; gap: .5rem; flex-wrap: wrap;
+    margin-bottom: 1rem; align-items: center;
+}
+.filter-bar input, .filter-bar select { max-width: 14rem; }
+
+.form { background: var(--surface); border: 1px solid var(--border);
+        border-radius: var(--radius); padding: 1.25rem; max-width: 720px; }
+.form-row { display: flex; gap: 1rem; align-items: center; margin-bottom: .9rem; }
+.form-row > label { flex: 0 0 11rem; color: var(--muted); font-size: .9rem; }
+.form-row > input, .form-row > select, .form-row > textarea, .form-row > span { flex: 1; }
+.form-actions { margin-top: 1.25rem; display: flex; gap: .5rem; }
+
+input[type=text], input[type=password], input[type=number], input[type=date],
+input[type=email], input[type=tel], select, textarea {
+    padding: .45rem .6rem; border: 1px solid var(--border);
+    border-radius: var(--radius); font: inherit; background: #fff; color: var(--text);
+    width: 100%;
+}
+input:focus, select:focus, textarea:focus {
+    outline: 2px solid rgba(37, 99, 235, .35); border-color: var(--primary);
+}
+textarea { resize: vertical; }
+form.inline { display: inline; }
+
+.thumb { max-width: 120px; border-radius: var(--radius); border: 1px solid var(--border); }
+
+/* ---------- Detail list ---------- */
+.detail-list {
+    display: grid; grid-template-columns: 11rem 1fr; gap: .5rem 1rem;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 1.25rem; margin: 0;
+}
+.detail-list dt { color: var(--muted); font-size: .9rem; }
+.detail-list dd { margin: 0; }
+
+/* ---------- Dashboard stats ---------- */
+.stat-grid {
+    display: grid; gap: 1rem; margin-bottom: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+.stat-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 1rem;
+    display: flex; flex-direction: column; gap: .35rem;
+}
+.stat-label { color: var(--muted); font-size: .85rem; }
+.stat-value { font-size: 1.75rem; font-weight: 600; }
+
+/* ---------- Login ---------- */
+.login-page {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 100vh; padding: 1rem;
+}
+.login-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 2rem; width: 100%; max-width: 380px;
+}
+.login-card h1 { text-align: center; margin-bottom: .25rem; }
+.login-card p.muted { text-align: center; margin-top: 0; margin-bottom: 1.5rem; font-size: .9rem; }
+.login-card label { display: block; margin: .75rem 0 .3rem; font-size: .9rem; color: var(--muted); }
+.login-card button { margin-top: 1.25rem; }
+
+/* ---------- Error pages ---------- */
+.error-page {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 100vh; padding: 1rem;
+}
+.error-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 2.5rem; text-align: center; max-width: 560px;
+}
+.error-card h1 { font-size: 3.5rem; margin: 0 0 .5rem; color: var(--danger); }
+.error-detail { text-align: left; margin: 1.25rem 0; }
+.error-detail pre {
+    white-space: pre-wrap; word-break: break-word;
+    background: var(--bg); padding: .75rem; border-radius: var(--radius); font-size: .8rem;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 720px) {
+    .layout { flex-direction: column; }
+    .sidebar { flex: none; border-right: none; border-bottom: 1px solid var(--border); }
+    .sidebar ul { display: flex; flex-wrap: wrap; }
+    .form-row { flex-direction: column; align-items: stretch; gap: .3rem; }
+    .form-row > label { flex: none; }
+    .detail-list { grid-template-columns: 1fr; }
+}

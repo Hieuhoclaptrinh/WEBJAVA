@@ -1,0 +1,7 @@
+# Thu muc dich cho anh upload (anh phong, avatar khach thue).
+#
+# Luu y: file trong thu muc nay se BI MAT khi redeploy WAR, vi Tomcat giai nen
+# lai webapp. Khi lam that, hay luu ra thu muc ngoai webapp - lay duong dan tu
+# bien moi truong / config thay vi hardcode (Windows: D:/uploads,
+# macOS/Linux: /var/studentrent/uploads) va dung java.nio.file.Path de ghep
+# duong dan cho khoi phu thuoc he dieu hanh.

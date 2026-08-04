@@ -1,0 +1,25 @@
+# =====================================================================
+#  MAU cho cau hinh DB rieng cua tung may.
+#
+#  Cach dung:
+#      copy file nay thanh  db.local.properties  (cung thu muc nay)
+#      roi sua lai cho khop MySQL cua may ban dang ngoi.
+#
+#  db.local.properties bi .gitignore bo qua => KHONG bao gio len git,
+#  nen may Windows va may macOS moi may mot mat khau ma van dong bo
+#  code binh thuong, khong xung dot.
+#
+#  Chi can khai bao lai KEY NAO KHAC voi db.properties. Key khong ghi
+#  o day se lay gia tri tu db.properties.
+#
+#  Thu tu uu tien:  db.properties  <  db.local.properties  <  bien moi truong
+# =====================================================================
+
+# Vi du: MySQL cai bang Homebrew tren macOS thuong khong co mat khau root
+#jdbc.password=
+
+# Vi du: may Windows dat mat khau root khi cai bang bo cai MySQL
+#jdbc.password=matkhau_cua_may_nay
+
+# Vi du: MySQL chay o port khac, hoac dung ten database khac
+#jdbc.url=jdbc:mysql://localhost:3307/student_rent?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh

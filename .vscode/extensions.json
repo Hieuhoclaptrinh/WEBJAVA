@@ -1,0 +1,9 @@
+{
+    // VS Code se goi y cai cac extension nay khi mo folder
+    "recommendations": [
+        // Extension Pack for Java: language server, debugger, Maven, test runner
+        "vscjava.vscode-java-pack",
+        // Ap dung .editorconfig (encoding, line ending, indent) tren moi may
+        "editorconfig.editorconfig"
+    ]
+}

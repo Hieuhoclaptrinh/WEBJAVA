@@ -1,0 +1,25 @@
+# Ap dung cho moi editor (VS Code can extension EditorConfig, IntelliJ co san).
+# Giu encoding + line ending + indent giong nhau tren Windows / macOS / Linux.
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+
+[*.{json,yml,yaml}]
+indent_size = 4
+
+[*.{js,css}]
+indent_size = 4
+
+[*.md]
+# Markdown dung 2 space cuoi dong de xuong hang -> khong trim
+trim_trailing_whitespace = false
+
+# Script Windows bat buoc CRLF - khop voi .gitattributes
+[*.{bat,cmd}]
+end_of_line = crlf

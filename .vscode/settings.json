@@ -1,0 +1,25 @@
+{
+    // ------ Nhat quan giua Windows / macOS / Linux ------
+    "files.encoding": "utf8",
+    "files.eol": "\n",
+    "files.insertFinalNewline": true,
+
+    // ------ Java ------
+    // Tu dong dong bo classpath tu pom.xml khi pom thay doi
+    "java.configuration.updateBuildConfiguration": "automatic",
+    // Bien compile-error thanh warning cho cac stub UnsupportedOperationException? Khong can.
+    "java.compile.nullAnalysis.mode": "disabled",
+
+    // ------ An thu muc build khoi cay file va tim kiem ------
+    "files.exclude": {
+        "**/target": true
+    },
+    "search.exclude": {
+        "**/target": true
+    },
+
+    // JSP khong co language server chinh thuc; to mau HTML la du dung
+    "files.associations": {
+        "*.jsp": "html"
+    }
+}

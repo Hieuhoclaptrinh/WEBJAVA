@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
+                             https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
+         version="6.0">
+
+    <display-name>Student Rent Management</display-name>
+
+    <!-- ============================================================
+         Locale co dinh cho JSTL <fmt:*>
+
+         Khong khai bao thi <fmt:formatNumber> / <fmt:formatDate> lay locale tu
+         header Accept-Language cua browser, thieu nua thi lay locale cua may
+         chay Tomcat. Cung mot so tien se hien "1.800.000" tren may nay va
+         "1,800,000" tren may kia - lech giua Windows va macOS, va lech giua
+         hai nguoi cung mo mot trang. Ghim vi_VN de moi may hien giong nhau.
+
+         Doi sang locale khac: sua gia tri duoi day, khong phai sua tung file JSP.
+         ============================================================ -->
+    <context-param>
+        <param-name>jakarta.servlet.jsp.jstl.fmt.locale</param-name>
+        <param-value>vi_VN</param-value>
+    </context-param>
+
+    <!-- ============================================================
+         Servlet va listener dung annotation (@WebServlet, @WebListener).
+         Rieng FILTER khai bao o day de kiem soat THU TU chay:
+             EncodingFilter -> AuthFilter -> RoleFilter
+         (thu tu <filter-mapping> quyet dinh, annotation thi khong).
+         ============================================================ -->
+
+    <filter>
+        <filter-name>EncodingFilter</filter-name>
+        <filter-class>com.studentrent.filter.EncodingFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>AuthFilter</filter-name>
+        <filter-class>com.studentrent.filter.AuthFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>RoleFilter</filter-name>
+        <filter-class>com.studentrent.filter.RoleFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>EncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>RoleFilter</filter-name>
+        <url-pattern>/reports</url-pattern>
+        <url-pattern>/reports/*</url-pattern>
+    </filter-mapping>
+
+    <!-- ============================================================
+         Trang mac dinh
+         ============================================================ -->
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+
+    <!-- ============================================================
+         Trang loi
+         ============================================================ -->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/WEB-INF/views/error/404.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>403</error-code>
+        <location>/WEB-INF/views/error/403.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/WEB-INF/views/error/500.jsp</location>
+    </error-page>
+    <!-- Bat moi exception chua duoc xu ly (gom ca UnsupportedOperationException
+         cua cac stub) -->
+    <error-page>
+        <exception-type>java.lang.Throwable</exception-type>
+        <location>/WEB-INF/views/error/500.jsp</location>
+    </error-page>
+
+    <!-- ============================================================
+         Session
+         ============================================================ -->
+    <session-config>
+        <session-timeout>30</session-timeout>
+        <cookie-config>
+            <http-only>true</http-only>
+            <!-- Bat secure khi da chay HTTPS -->
+            <secure>false</secure>
+        </cookie-config>
+        <tracking-mode>COOKIE</tracking-mode>
+    </session-config>
+
+    <!-- ============================================================
+         JSP: UTF-8 cho moi trang, bo whitespace do tag sinh ra
+         ============================================================ -->
+    <jsp-config>
+        <jsp-property-group>
+            <url-pattern>*.jsp</url-pattern>
+            <page-encoding>UTF-8</page-encoding>
+            <!-- Cam scriptlet <% %> trong JSP, buoc dung EL + JSTL (dung chuan MVC).
+                 Doi thanh false neu ban that su can viet Java trong JSP. -->
+            <scripting-invalid>true</scripting-invalid>
+            <trim-directive-whitespaces>true</trim-directive-whitespaces>
+        </jsp-property-group>
+    </jsp-config>
+
+</web-app>

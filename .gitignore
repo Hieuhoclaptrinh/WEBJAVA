@@ -1,0 +1,38 @@
+# Maven
+target/
+*.war
+
+# IDE
+.idea/
+*.iml
+.settings/
+.classpath
+.project
+nbproject/
+
+# .vscode: GIU cac file cau hinh dung chung (tasks/launch/settings/extensions
+# la mot phan cua du an - can cho workflow chay/debug tren moi may),
+# chi bo qua file rac cuc bo
+.vscode/*
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# Anh nguoi dung upload
+src/main/webapp/uploads/*
+!src/main/webapp/uploads/.gitkeep
+
+# Claude Code: bo qua ca thu muc. Allowlist quyen o day duoc sinh tu dong theo
+# tung phien lam viec va nhung cung duong dan tuyet doi cua may (JAVA_HOME,
+# duong dan mvn.cmd, PID...), khong co gia tri gi tren may khac.
+.claude/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Cau hinh DB cuc bo cho tung may - DBConnection doc file nay va ghi de
+# db.properties neu no ton tai. Xem README muc "Moi may mot cau hinh DB".
+src/main/resources/db.local.properties
+db.local.properties

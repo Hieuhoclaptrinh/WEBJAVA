@@ -1,0 +1,21 @@
+# Chuan hoa line ending khi commit: moi file text luu trong repo la LF.
+# Nho vay checkout tren Windows hay macOS deu cho ket qua nhu nhau,
+# khong bao gio bi diff "ca file thay doi" chi vi CRLF/LF.
+* text=auto eol=lf
+
+# Script Windows bat buoc CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# File nhi phan - khong dong cham
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.webp binary
+*.gif  binary
+*.ico  binary
+*.ttf  binary
+*.woff binary
+*.woff2 binary
+*.jar  binary
+*.war  binary

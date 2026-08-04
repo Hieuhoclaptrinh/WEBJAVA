@@ -1,0 +1,16 @@
+{
+    // F5 de debug:
+    // 1) Chay task "Tomcat: debug" (Terminal > Run Task...)
+    // 2) Cho Tomcat khoi dong xong, dat breakpoint trong servlet/service
+    // 3) F5 -> "Attach to Tomcat (port 8000)"
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Attach to Tomcat (port 8000)",
+            "request": "attach",
+            "hostName": "localhost",
+            "port": 8000
+        }
+    ]
+}

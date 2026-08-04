@@ -1,0 +1,94 @@
+{
+    // Terminal > Run Task... (hoac Ctrl/Cmd+Shift+B cho task build mac dinh)
+    // Moi task chi goi "mvn ..." nen chay giong het nhau tren Windows/macOS/Linux.
+    //
+    // Luu y: moi arg dang -Dkey.co.dau.cham=value PHAI dung dang
+    // { "value": ..., "quoting": "strong" } - PowerShell (shell mac dinh tren
+    // Windows) tach token khong quote tai dau cham, con zsh (macOS) glob dau *.
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Maven: package (build WAR)",
+            "type": "shell",
+            "command": "mvn",
+            "args": ["clean", "package"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Tomcat: run",
+            "detail": "Build roi chay Tomcat 10 nhung tai http://localhost:8080/student-rent/ (Ctrl+C de dung)",
+            "type": "shell",
+            "command": "mvn",
+            "args": ["clean", "package", "cargo:run"],
+            "isBackground": true,
+            "problemMatcher": {
+                "pattern": {
+                    "regexp": "^.*$"
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": ".*Building war.*",
+                    "endsPattern": ".*Press Ctrl-C to stop the container.*"
+                }
+            }
+        },
+        {
+            "label": "Tomcat: debug",
+            "detail": "Nhu 'Tomcat: run' nhung mo cong debug 8000 - sau do bam F5 (Attach to Tomcat)",
+            "type": "shell",
+            "command": "mvn",
+            "args": [
+                "clean",
+                "package",
+                "cargo:run",
+                {
+                    "value": "-Dcargo.jvmargs=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000",
+                    "quoting": "strong"
+                }
+            ],
+            "isBackground": true,
+            "problemMatcher": {
+                "pattern": {
+                    "regexp": "^.*$"
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": ".*Building war.*",
+                    "endsPattern": ".*Press Ctrl-C to stop the container.*"
+                }
+            }
+        },
+        {
+            "label": "BCrypt: sinh hash mat khau",
+            "detail": "Chi dung mat khau ASCII. Tranh dau nhay don (') va ky tu tieng Viet - xem README",
+            "type": "shell",
+            "command": "mvn",
+            "args": [
+                "-q",
+                "compile",
+                "exec:java",
+                {
+                    "value": "-Dexec.mainClass=com.studentrent.util.PasswordUtil",
+                    "quoting": "strong"
+                },
+                {
+                    "value": "-Dexec.args=${input:password}",
+                    "quoting": "strong"
+                }
+            ],
+            "problemMatcher": []
+        }
+    ],
+    "inputs": [
+        {
+            "id": "password",
+            "type": "promptString",
+            "password": true,
+            "description": "Mat khau can hash - CHI ASCII (se hien trong terminal khi mvn chay)"
+        }
+    ]
+}

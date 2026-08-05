@@ -28,7 +28,7 @@
     <tbody>
     <c:choose>
         <c:when test="${empty tenants}">
-            <tr><td colspan="6" class="empty">Chưa có dữ liệu (TenantServlet chưa implement)</td></tr>
+            <tr><td colspan="6" class="empty">Chưa có dữ liệu.</td></tr>
         </c:when>
         <c:otherwise>
             <c:forEach var="t" items="${tenants}">
@@ -52,5 +52,25 @@
     </c:choose>
     </tbody>
 </table>
+
+<c:if test="${totalPages > 1}">
+    <div class="pagination">
+        <c:if test="${page > 1}">
+            <c:url var="prevUrl" value="/tenants">
+                <c:param name="page" value="${page - 1}"/>
+                <c:param name="keyword" value="${param.keyword}"/>
+            </c:url>
+            <a class="btn btn-sm" href="${prevUrl}">« Trước</a>
+        </c:if>
+        <span>Trang <c:out value="${page}"/> / <c:out value="${totalPages}"/></span>
+        <c:if test="${page < totalPages}">
+            <c:url var="nextUrl" value="/tenants">
+                <c:param name="page" value="${page + 1}"/>
+                <c:param name="keyword" value="${param.keyword}"/>
+            </c:url>
+            <a class="btn btn-sm" href="${nextUrl}">Sau »</a>
+        </c:if>
+    </div>
+</c:if>
 
 <jsp:include page="/WEB-INF/views/layout/footer.jsp"/>

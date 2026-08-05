@@ -13,10 +13,21 @@ import java.io.IOException;
 /** Cac helper dung chung cho moi servlet: forward view, redirect, doc tham so. */
 public abstract class BaseServlet extends HttpServlet {
 
-    /** Forward tuong doi trong /WEB-INF/views, vd forward(req, resp, "room/list"). */
+    /**
+     * Forward tuong doi trong /WEB-INF/views, vd forward(req, resp, "room/list").
+     *
+     * <p>Thong bao flash ({@code Constants.ATTR_ERROR} / {@code ATTR_SUCCESS}) khi
+     * dat vao SESSION (can thiet vi redirect sinh request moi) duoc xoa ngay sau
+     * khi view da render, de khong hien lai o lan forward tiep theo.</p>
+     */
     protected void forward(HttpServletRequest req, HttpServletResponse resp, String viewName)
             throws ServletException, IOException {
         req.getRequestDispatcher(Constants.view(viewName)).forward(req, resp);
+        HttpSession session = req.getSession(false);
+        if (session != null) {
+            session.removeAttribute(Constants.ATTR_ERROR);
+            session.removeAttribute(Constants.ATTR_SUCCESS);
+        }
     }
 
     /** Redirect kem context path, vd redirect(resp, req, "/rooms"). */

@@ -23,3 +23,7 @@
 
 # Vi du: MySQL chay o port khac, hoac dung ten database khac
 #jdbc.url=jdbc:mysql://localhost:3307/student_rent?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh
+
+# Vi du: doi thu muc luu anh upload cua rieng may nay (mac dinh la
+# ~/studentrent-uploads neu bo trong)
+#app.upload.dir=/Users/ten-ban/studentrent-uploads

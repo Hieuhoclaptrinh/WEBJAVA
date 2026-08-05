@@ -34,10 +34,17 @@ public final class Constants {
     public static final int DEFAULT_PAGE_SIZE = 10;
 
     // ---------- Upload ----------
-    /** Thu muc con trong webapp de luu anh upload. */
+    /**
+     * Tien to URL de xem file upload, phuc vu qua {@code UploadServlet} (khong
+     * phai thu muc trong webapp - file that nam ngoai webapp, xem
+     * {@code AppContextListener} va {@code UploadUtil}). AuthFilter da cho qua
+     * tien to nay nhu tai nguyen tinh.
+     */
     public static final String UPLOAD_DIR = "uploads";
-    /** Gioi han 5 MB moi file. */
+    /** Gioi han kich thuoc request multipart (fileSizeThreshold/maxFileSize). */
     public static final long MAX_UPLOAD_SIZE = 5L * 1024 * 1024;
+    /** Gioi han rieng cho tung anh avatar/phong da luu (2 MB). */
+    public static final long MAX_AVATAR_SIZE = 2L * 1024 * 1024;
     public static final String[] ALLOWED_IMAGE_EXTENSIONS = {"jpg", "jpeg", "png", "webp"};
 
     // ---------- Role ----------

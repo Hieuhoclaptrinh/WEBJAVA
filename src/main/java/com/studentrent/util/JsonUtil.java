@@ -2,22 +2,34 @@ package com.studentrent.util;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializer;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-/** Ghi JSON response cho cac endpoint AJAX. */
+/**
+ * Ghi JSON response cho cac endpoint AJAX.
+ *
+ * <p>LocalDate/LocalDateTime can adapter rieng: Gson mac dinh dung reflection
+ * doc truong noi bo cua hai lop nay, nhung module java.time tren JDK 17 chan
+ * truy cap do ({@code InaccessibleObjectException}/{@code JsonIOException}) -
+ * moi model co cot DATE/DATETIME (Tenant, User...) se nem loi khi serialize
+ * neu thieu adapter tuong minh nhu duoi day.</p>
+ */
 public final class JsonUtil {
 
     private static final Gson GSON = new GsonBuilder()
             .serializeNulls()
             .registerTypeAdapter(LocalDate.class,
-                    (com.google.gson.JsonSerializer<LocalDate>) (src, type, ctx) ->
-                            src == null ? null
-                                        : new com.google.gson.JsonPrimitive(
-                                              src.format(DateTimeFormatter.ISO_LOCAL_DATE)))
+                    (JsonSerializer<LocalDate>) (src, type, ctx) ->
+                            src == null ? null : new JsonPrimitive(src.format(DateTimeFormatter.ISO_LOCAL_DATE)))
+            .registerTypeAdapter(LocalDateTime.class,
+                    (JsonSerializer<LocalDateTime>) (src, type, ctx) ->
+                            src == null ? null : new JsonPrimitive(src.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
             .create();
 
     private JsonUtil() {

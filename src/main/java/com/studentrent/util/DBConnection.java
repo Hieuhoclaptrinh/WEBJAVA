@@ -56,6 +56,16 @@ public final class DBConnection {
         return getDataSource().getConnection();
     }
 
+    /**
+     * Doc mot property tuy y (khong lien quan JDBC) tu cung 3 tang cau hinh
+     * {@code db.properties} / {@code db.local.properties} / bien moi truong -
+     * dung cho cac key nhu {@code app.upload.dir} de khong phai them mot co
+     * che nap file rieng.
+     */
+    public static String getAppProperty(String key, String defaultValue) {
+        return loadProperties().getProperty(key, defaultValue);
+    }
+
     /** Khoi tao lazy + thread-safe (double-checked locking). */
     private static HikariDataSource getDataSource() {
         HikariDataSource ds = dataSource;

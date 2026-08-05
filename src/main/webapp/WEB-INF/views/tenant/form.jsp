@@ -63,7 +63,7 @@
         <label for="avatar">Ảnh</label>
         <input type="file" id="avatar" name="avatar" accept="image/*">
         <c:if test="${not empty tenant.avatarPath}">
-            <img class="thumb" src="${ctx}/${tenant.avatarPath}" alt="Ảnh khách thuê">
+            <img class="thumb" src="${ctx}/uploads/${tenant.avatarPath}" alt="Ảnh khách thuê">
         </c:if>
     </div>
 

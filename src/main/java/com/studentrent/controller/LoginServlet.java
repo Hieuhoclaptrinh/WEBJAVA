@@ -1,5 +1,6 @@
 package com.studentrent.controller;
 
+import com.studentrent.model.User;
 import com.studentrent.service.AuthService;
 import com.studentrent.util.Constants;
 import jakarta.servlet.ServletException;
@@ -8,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.Optional;
 
 /** Trang dang nhap. */
 @WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
@@ -31,14 +33,26 @@ public class LoginServlet extends BaseServlet {
         String username = paramText(req, "username");
         String password = req.getParameter("password");
 
-        // TODO: goi authService.login(username, password)
-        //   - neu thanh cong: req.getSession(true).setAttribute(Constants.SESSION_USER, user)
-        //                     roi redirect ve /dashboard
-        //   - neu that bai:   set ATTR_ERROR va forward lai auth/login
-        //   Nho goi session.invalidate() truoc khi tao session moi de tranh
-        //   session fixation.
-        req.setAttribute(Constants.ATTR_ERROR, "Chuc nang dang nhap chua duoc implement.");
-        req.setAttribute("username", username);
-        forward(req, resp, "auth/login");
+        Optional<User> authenticated = authService.login(username, password);
+
+        if (authenticated.isEmpty()) {
+            // FORWARD chu khong redirect: redirect sinh request moi nen attribute
+            // bao loi va username vua go se mat sach.
+            req.setAttribute(Constants.ATTR_ERROR, "Tên đăng nhập hoặc mật khẩu không đúng.");
+            req.setAttribute("username", username);
+            forward(req, resp, "auth/login");
+            return;
+        }
+
+        // Chong session fixation: doi session id TRUOC khi gan user vao session,
+        // de id ma ke tan cong co the da biet tu truoc tro nen vo dung.
+        // changeSessionId() nem IllegalStateException neu chua co session, nen phai
+        // getSession(true) truoc. Day la cach cua Servlet 3.1+ va giu nguyen moi
+        // attribute dang co - khong dung invalidate() roi tu tao session moi.
+        req.getSession(true);
+        req.changeSessionId();
+        req.getSession().setAttribute(Constants.SESSION_USER, authenticated.get());
+
+        redirect(resp, req, "/dashboard");
     }
 }

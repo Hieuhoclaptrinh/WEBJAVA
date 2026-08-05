@@ -160,6 +160,20 @@ Những thứ **không** lên git (đúng như thiết kế, `.gitignore` đã l
 Nghĩa là sau khi clone, máy mới **phải** tự tạo `db.local.properties` và tự chạy
 `schema.sql` — không có hai thứ đó thì app chạy lên được nhưng không nối được DB.
 
+## Làm việc nhóm
+
+Khi có thêm thành viên, đọc **[CONTRIBUTING.md](CONTRIBUTING.md)** — quy trình
+nhánh + pull request, danh sách những gì không được commit và vì sao, cách xử lý
+xung đột, và hướng dẫn deploy.
+
+Mỗi push và mỗi pull request đều chạy CI
+([.github/workflows/build.yml](.github/workflows/build.yml)) trên **Ubuntu**. Chạy
+trên Linux là có chủ đích: Linux phân biệt chữ hoa/thường trong tên file, còn
+macOS và Windows thì không. Nhờ vậy CI bắt được lỗi sai hoa/thường ở đường dẫn —
+loại lỗi chạy êm trên máy bạn rồi 404 trên máy người khác. CI cũng kiểm build
+sạch bằng JDK 17, kiểm `schema.sql` áp được lên MySQL 8 thật, và chặn file CRLF
+lọt vào repo.
+
 ## Chạy dự án
 
 **1. Tạo database** *(một lần trên mỗi máy)*
@@ -260,12 +274,29 @@ Những gì đã được xử lý để hai máy cho ra kết quả giống nha
 - Khi implement `UploadUtil`, ghép đường dẫn bằng `java.nio.file.Path` (đã ghi
   chú trong javadoc) — không nối chuỗi `\` hay `/` cứng.
 
-Hai chỗ còn khác nhau giữa hai OS mà bạn cần biết:
+Ba chỗ còn khác nhau giữa hai OS mà bạn cần biết:
 
 - **`mysql` trên Windows không có sẵn trong PATH**, trên macOS (Homebrew) thì có.
   Xem mục *Yêu cầu môi trường*.
 - **PowerShell không hỗ trợ `<`**, nên mọi lệnh trong tài liệu này dùng dạng
   `mysql -u root -p -e "source ..."` thay vì `mysql ... < file.sql`.
+- **PowerShell 5.1 (bản có sẵn trên Windows) không hỗ trợ `&&`.** Ghép lệnh bằng
+  `&&` sẽ chết ngay ở bước parse:
+  *"The token '&&' is not a valid statement separator in this version."*
+  Trên zsh/bash của macOS thì `&&` chạy bình thường — nên câu lệnh copy từ hướng
+  dẫn trên mạng thường chỉ đúng một nửa. Cách viết chạy được ở cả hai shell là
+  **mỗi lệnh một dòng**:
+
+  ```bash
+  git add .
+  git commit -m "mo ta thay doi"
+  git push
+  ```
+
+  Dùng `;` thay `&&` cũng parse được trên PowerShell, nhưng ý nghĩa KHÁC: `;`
+  chạy lệnh sau bất kể lệnh trước thành công hay thất bại, còn `&&` chỉ chạy khi
+  lệnh trước thành công. Với git thì khác biệt này quan trọng — `git add` lỗi mà
+  vẫn `git commit` là commit ra bản thiếu file.
 
 ## Trạng thái hiện tại
 

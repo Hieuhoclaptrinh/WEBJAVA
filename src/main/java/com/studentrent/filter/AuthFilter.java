@@ -1,6 +1,7 @@
 package com.studentrent.filter;
 
 import com.studentrent.util.Constants;
+import jakarta.servlet.DispatcherType;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -8,16 +9,20 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.util.Set;
 
 /**
  * Chan moi request khi chua dang nhap, tru cac duong dan cong khai.
- * Khai bao trong web.xml de chay sau EncodingFilter.
+ * Khai bao trong web.xml (map san /*) de chay sau EncodingFilter.
  *
- * <p>Skeleton: hien tai CHO QUA tat ca de con deploy va xem duoc giao dien.
- * Bo comment doan kiem tra ben duoi khi da implement dang nhap.</p>
+ * <p>Hai chieu dieu huong:</p>
+ * <ul>
+ *   <li>chua dang nhap ma vao trang can quyen -&gt; {contextPath}/login</li>
+ *   <li>da dang nhap ma vao lai /login        -&gt; {contextPath}/dashboard</li>
+ * </ul>
  */
 public class AuthFilter implements Filter {
 
@@ -34,19 +39,35 @@ public class AuthFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
 
+        // Trang loi do container dispatch toi (403/404/500) luon phai qua. Mapping
+        // trong web.xml khong khai bao <dispatcher> nen mac dinh chi la REQUEST va
+        // nhanh nay khong chay; giu lai de neu sau nay co ai them ERROR vao mapping
+        // thi loi 500 khong bi bien thanh redirect ve /login, giau mat loi that.
+        if (req.getDispatcherType() == DispatcherType.ERROR) {
+            chain.doFilter(request, response);
+            return;
+        }
+
         String path = req.getRequestURI().substring(req.getContextPath().length());
+
+        HttpSession session = req.getSession(false);
+        boolean loggedIn = session != null && session.getAttribute(Constants.SESSION_USER) != null;
+
+        // Da dang nhap thi khong quay lai trang dang nhap nua
+        if (loggedIn && "/login".equals(path)) {
+            resp.sendRedirect(req.getContextPath() + "/dashboard");
+            return;
+        }
 
         if (isPublic(path)) {
             chain.doFilter(request, response);
             return;
         }
 
-        // TODO: bo comment khi AuthService.login da hoat dong
-        // HttpSession session = req.getSession(false);
-        // if (session == null || session.getAttribute(Constants.SESSION_USER) == null) {
-        //     resp.sendRedirect(req.getContextPath() + "/login");
-        //     return;
-        // }
+        if (!loggedIn) {
+            resp.sendRedirect(req.getContextPath() + "/login");
+            return;
+        }
 
         chain.doFilter(request, response);
     }

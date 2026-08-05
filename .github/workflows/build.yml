@@ -1,0 +1,95 @@
+# CI cho StudentRent.
+#
+# Chay tren ubuntu-latest CO CHU DICH: Linux phan biet chu hoa/thuong trong ten
+# file, con macOS (APFS) va Windows (NTFS) thi khong. Nghia la mot duong dan sai
+# hoa/thuong - vi du href tro tro tro "Style.css" trong khi file that la
+# "style.css" - VAN CHAY tren may ca hai ban va chi vo o day. CI nay la cai luoi
+# duy nhat bat duoc loai loi do truoc khi no den tay nguoi khac.
+#
+# Ngoai ra CI con kiem: WAR build duoc bang JDK 17 sach, schema.sql ap duoc len
+# MySQL 8 that, va khong ai commit file CRLF lam ban diff cua nguoi khac.
+
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Push lien tiep vao cung mot nhanh thi huy lan chay cu, do ton phut CI.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        # Ghim version thay vi dung "latest" - de CI hom nay va hom sau giong nhau.
+        # 8.4 khop voi mysql-connector-j 8.4.0 trong pom.xml.
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: ci-root-pw
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -pci-root-pw"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cai JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          # Cache ~/.m2 => lan chay sau nhanh hon nhieu
+          cache: maven
+
+      # Neu buoc nay do tren Linux ma may ban chay duoc, gan nhu chac chan la
+      # sai chu hoa/thuong o mot duong dan file nao do.
+      - name: Build WAR
+        run: mvn -B -ntp clean package
+
+      - name: Ap schema len MySQL that
+        env:
+          MYSQL_PWD: ci-root-pw
+        run: mysql -h 127.0.0.1 -P 3306 -uroot -e "source database/schema.sql"
+
+      # Xac nhan seed data vao that, khong phai chi "khong bao loi".
+      - name: Kiem seed data
+        env:
+          MYSQL_PWD: ci-root-pw
+        run: |
+          mysql -h 127.0.0.1 -P 3306 -uroot student_rent -e "
+            SELECT 'users'      AS bang, COUNT(*) AS so_dong FROM users
+            UNION ALL SELECT 'room_types', COUNT(*) FROM room_types
+            UNION ALL SELECT 'rooms',      COUNT(*) FROM rooms
+            UNION ALL SELECT 'services',   COUNT(*) FROM services;"
+
+      # .gitattributes quy dinh moi file text luu trong repo la LF. Neu co file
+      # CRLF lot vao, nguoi khac se thay diff "ca file thay doi" khi ho sua 1 dong.
+      - name: Kiem line ending (phai la LF)
+        run: |
+          bad=$(git ls-files --eol | grep -E '^i/crlf' || true)
+          if [ -n "$bad" ]; then
+            echo "Cac file duoi day dang luu CRLF trong repo, phai chuyen ve LF:"
+            echo "$bad"
+            exit 1
+          fi
+          echo "OK - toan bo file text trong repo la LF"
+
+      # Ai cung tai duoc WAR da build tu tab Actions, khong can dung may minh build.
+      - name: Luu WAR lam artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: student-rent-war
+          path: target/student-rent.war
+          if-no-files-found: error
+          retention-days: 14
